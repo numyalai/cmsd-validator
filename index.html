@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        video{
+            width: 640px;
+            height: 360px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <video id="videoElement" controls loop muted></video>
+    </div>
+    <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <script>
+        const videoElement = document.getElementById('videoElement');
+        const dashPlayer = dashjs.MediaPlayer().create();
+
+        dashPlayer.initialize(videoElement, 'http://localhost:8080/cmsdValidator/media/vod/bbb_30fps_akamai/bbb_30fps.mpd', false);
+        //dashPlayer.initialize(videoElement, 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd', false);
+
+        // Enable XHR debugging
+        // console.log(dashPlayer);
+        // console.log(dashPlayer.getSettings());
+        console.log(dashPlayer.getDashMetrics())
+        console.log((dashPlayer.getDashMetrics()).getCurrentHttpRequest("video"));
+        console.log((dashPlayer.getDashMetrics()).getClassName());
+
+        // console.log(dashPlayer.getDebug());
+        //console.log(dashPlayer.getDashAdapter());
+
+        // const xhrLoader = dashjs.XHRLoader;
+        // console.log(dashPlayer)
+
+        // xhrLoader.prototype.load = function (request) {
+        // console.log('Service Response:', request);
+        
+        // dashjs.XHRLoader.prototype.load.call
+        // (xhrLoader, request);
+        // };
+    </script>
+    <!-- <script>
+        const videoElement = document.getElementById('videoElement');
+        const dashPlayer = dashjs.MediaPlayer().create();
+        dashPlayer.initialize(videoElement, 'http://10.42.0.1:8080/eins/zwei/media/vod/bbb_30fps_akamai/bbb_30fps.mpd', false);
+
+        // Enable XHR debugging
+        const xhrLoader = dashjs.XHRLoader;
+        console.log(dashjs);
+
+        xhrLoader.prototype.load = function (request) {
+        console.log('Service Response:', request);
+        
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open
+        (request.method, request.url, true);
+        
+        // Log the received headers
+        xhr.onload = function() {
+            const headers = xhr.getAllResponseHeaders();
+            console.log('Received Headers:', headers);
+        };
+        
+        xhr.send();
+        }; 
+    </script> -->
+    
+</body>
+</html>
