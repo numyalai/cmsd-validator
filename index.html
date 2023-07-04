@@ -1,95 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-        video{
-            width: 640px;
-            height: 360px;
-        }
+      video {
+        width: 640px;
+        height: 360px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div>
-        <video id="videoElement" controls loop muted></video>
+      <video id="videoElement" controls loop muted></video>
     </div>
     <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    {% comment %} import CMSDValidator.js {% endcomment %}
+    <script src="CMSDValidator.js"></script>
     <script>
-        const videoElement = document.getElementById('videoElement');
-        const dashPlayer = dashjs.MediaPlayer().create();
+      const videoElement = document.getElementById("videoElement")
+      const dashPlayer = dashjs.MediaPlayer().create()
 
-        dashPlayer.initialize(videoElement, 'http://localhost:8080/cmsdValidator/media/vod/bbb_30fps_akamai/bbb_30fps.mpd', false);
-        //dashPlayer.initialize(videoElement, 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd', false);
+      dashPlayer.initialize(
+        videoElement,
+        "http://localhost:8080/cmsdValidator/media/vod/bbb_30fps_akamai/bbb_30fps.mpd",
+        false
+      )
+      //dashPlayer.initialize(videoElement, 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd', false);
 
-        // Enable XHR debugging
-        // console.log(dashPlayer);
-        // console.log(dashPlayer.getSettings());
+      // Enable XHR debugging
+      // console.log(dashPlayer);
+      // console.log(dashPlayer.getSettings());
 
-        setInterval(() => {
-            var metrics = dashPlayer.getDashMetrics()
-            console.log(metrics.getHttpRequests("video"))
+      staticResponse = "at=" + "12345" + ","
+      staticResponse += "br=" + "12345" + ","
+      staticResponse += "ht=" + "12345" + ","
+      staticResponse += "n=" + "Intermediary Identifier" + ","
+      staticResponse += "nor=" + "path|" + ","
+      staticResponse += "nrr=" + "start-end|" + ","
+      staticResponse += "d=" + "12345" + ","
+      staticResponse += "ot=" + "v" + ","
+      staticResponse += "su=" + "FALSE" + ","
+      staticResponse += "st=" + "v" + ","
+      staticResponse += "sf=" + "d" + ","
+      staticResponse += "v=" + "12345"
 
-            const x = metrics.getHttpRequests("video")
+      setInterval(() => {
+        var metrics = dashPlayer.getDashMetrics()
+        console.log(metrics.getHttpRequests("video"))
 
-            const headersString =x.pop()?._responseHeaders
+        const headers = metrics.getHttpRequests("video")
+        const _responseHeadersArray = headers.filter((x) => x._responseHeaders != null)
+                                             .map((x) => x._responseHeaders)
+        for(var i = 0; i < _responseHeadersArray.length; i++){
+            CMSDValidator(_responseHeadersArray[i])
+        }
 
-            function parseHeaders(headersString) {
-                const headersArray = headersString.split('\r\n');
-                const headersObj = {};
+        //   console.log("HTTP Request Headers"  + Object.keys(metrics.getHttpRequests("video")))
+        console.log("#############")
+      }, 4000)
 
-                headersArray.forEach(header => {
-                    const [key, ...valueParts] = header.split(': ');
-                    const value = valueParts.join(': '); // Reconstruct the original value (it may contain ':')
-                    headersObj[key] = value;
-                });
+      // console.log(dashPlayer.getDebug());
+      //console.log(dashPlayer.getDashAdapter());
 
-                return headersObj;
-            }
+      // const xhrLoader = dashjs.XHRLoader;
+      // console.log(dashPlayer)
 
-            const headersJSON = parseHeaders(headersString);
-          //  console.log(headersJSON);
+      // xhrLoader.prototype.load = function (request) {
+      // console.log('Service Response:', request);
 
-            // Parse cmsd-dynamic value
-            const cmsdDynamicValue = headersJSON["cmsd-dynamic"];
-            const modifiedCmsdDynamicValue = cmsdDynamicValue.replace(/\\"/g, '"');
-            const cmsdDynamicObject = {};
-            modifiedCmsdDynamicValue.split(';').forEach(pair => {
-                const [key, value] = pair.split('=');
-                cmsdDynamicObject[key] = value;
-            });
-
-            console.log(cmsdDynamicObject);
-
-            // Parse cmsd-static value
-            const cmsdStaticValue = headersJSON["cmsd-static"];
-            const modifiedCmsdStaticValue = cmsdStaticValue.replace(/\\"/g, '"');
-            const cmsdStaticObject = {};
-            modifiedCmsdStaticValue.split(',').forEach(pair => {
-                const [key, value] = pair.split('=');
-                cmsdStaticObject[key] = value;
-            });
-
-            console.log(cmsdStaticObject);
-
-         //   console.log("HTTP Request Headers"  + Object.keys(metrics.getHttpRequests("video")))
-            console.log("#############")
-        }, 3000)
-
-        // console.log(dashPlayer.getDebug());
-        //console.log(dashPlayer.getDashAdapter());
-
-        // const xhrLoader = dashjs.XHRLoader;
-        // console.log(dashPlayer)
-
-        // xhrLoader.prototype.load = function (request) {
-        // console.log('Service Response:', request);
-        
-        // dashjs.XHRLoader.prototype.load.call
-        // (xhrLoader, request);
-        // };
+      // dashjs.XHRLoader.prototype.load.call
+      // (xhrLoader, request);
+      // };
     </script>
     <!-- <script>
         const videoElement = document.getElementById('videoElement');
@@ -117,6 +101,5 @@
         xhr.send();
         }; 
     </script> -->
-    
-</body>
+  </body>
 </html>
