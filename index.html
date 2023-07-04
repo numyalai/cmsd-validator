@@ -34,7 +34,7 @@
 
             const x = metrics.getHttpRequests("video")
 
-            const headersString =x.pop()._responseHeaders
+            const headersString =x.pop()?._responseHeaders
 
             function parseHeaders(headersString) {
                 const headersArray = headersString.split('\r\n');
