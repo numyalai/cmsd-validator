@@ -11,14 +11,14 @@
         height: 360px;
       }
     </style>
+    <script src="CMSDValidator.js"></script>
   </head>
   <body>
     <div>
       <video id="videoElement" controls loop muted></video>
     </div>
     <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script>
-    {% comment %} import CMSDValidator.js {% endcomment %}
-    <script src="CMSDValidator.js"></script>
+
     <script>
       const videoElement = document.getElementById("videoElement")
       const dashPlayer = dashjs.MediaPlayer().create()
@@ -34,18 +34,6 @@
       // console.log(dashPlayer);
       // console.log(dashPlayer.getSettings());
 
-      staticResponse = "at=" + "12345" + ","
-      staticResponse += "br=" + "12345" + ","
-      staticResponse += "ht=" + "12345" + ","
-      staticResponse += "n=" + "Intermediary Identifier" + ","
-      staticResponse += "nor=" + "path|" + ","
-      staticResponse += "nrr=" + "start-end|" + ","
-      staticResponse += "d=" + "12345" + ","
-      staticResponse += "ot=" + "v" + ","
-      staticResponse += "su=" + "FALSE" + ","
-      staticResponse += "st=" + "v" + ","
-      staticResponse += "sf=" + "d" + ","
-      staticResponse += "v=" + "12345"
 
       setInterval(() => {
         var metrics = dashPlayer.getDashMetrics()

@@ -1,7 +1,7 @@
 var querystring = require('querystring');
 var fs = require('fs');
 
-var LOGFILE = 'home/dominik/Uni/AWT/cmsd-validator/cmsd.log'; 
+var LOGFILE = '/home/sultan/school_projects/cmsd-validator/cmsd.log';
 
 function writeLog(msg) {
     //var dateTime = new Date().toLocaleString();
@@ -27,16 +27,16 @@ function sendCMSDHeaders(r){
     staticResponse += 'ht=' + '12345' + ','
     staticResponse += 'n=' + 'Intermediary Identifier' + ','
     staticResponse += 'nor=' + 'path|' + ','
-    staticResponse += 'nrr=' + 'start-end|' + ','
+    staticResponse += 'nrr=' + '1268-1268' + ','
     staticResponse += 'd=' + '12345' + ','
     staticResponse += 'ot=' + 'v' + ','
-    staticResponse += 'su=' + 'FALSE' + ','
+    staticResponse += 'su=' + 'false' + ','
     staticResponse += 'st=' + 'v' + ','
-    staticResponse += 'sf=' + 'd' + ','
+    staticResponse += 'sf=' + '(d)' + ','
     staticResponse += 'v=' + '12345'
 
     dynamicResponse = '"Identifier";'
-    dynamicResponse += 'du=' + 'TRUE' + ';'
+    dynamicResponse += 'du=' + 'true' + ';'
     dynamicResponse += 'etp=' + '12345' + ';'
     dynamicResponse += 'mb=' + '12345' + ';'
     dynamicResponse += 'rd=' + '12345' + ';'

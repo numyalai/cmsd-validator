@@ -1,3 +1,18 @@
+function validateStreamingFormat(format) {
+  const tokens = format.match(/\((.*?)\)/);
+  if (!tokens) {
+    // No tokens found, format is invalid or unknown
+    return false;
+  }
+
+  const expectedTokens = ['d', 'h', 's'];
+  const extractedTokens = tokens[1].split(' ');
+
+  // Check if all extracted tokens are valid
+  return extractedTokens.every(token => expectedTokens.includes(token) || token === 'o');
+}
+
+
 function validateNRR(nrrValue) {
   const rangeRegex = /(\d+)-(\d+)/
   const match = nrrValue.match(rangeRegex)
@@ -27,7 +42,7 @@ function validateKeyValue(key, value) {
     return !isNaN(value)
   }
   if (key == "br") {
-    return value == "false" || value == "true"
+    return !isNaN(value)
   }
 
   if (key == "ht") {
@@ -177,18 +192,7 @@ function validateKeyValue(key, value) {
           and DASH), then the inner-list SHOULD
           contain both target formats – e.g., (d h).
       */
-    const tokens = value.match(/\[(.*?)\]/)
-    // TODO: check other formats
-    if (!tokens) {
-      // No tokens found, format is invalid or unknown
-      return false
-    }
-
-    const expectedTokens = ["d", "h", "s", "o"]
-    const extractedTokens = tokens[1].split(" ")
-
-    // Check if all extracted tokens are valid
-    return extractedTokens.every(token => expectedTokens.includes(token))
+    return validateStreamingFormat(value);
   }
   if (key == "v") {
     /*
@@ -285,6 +289,9 @@ function validateKeyValue(key, value) {
       */
     return !isNaN(value)
   }
+
+
+  return true;
 }
 
 function parseHeaders(headersString) {
@@ -308,49 +315,56 @@ const CMSDValidator = header => {
   try {
     const headersJSON = parseHeaders(header)
     console.log("Headers parsed successfully, validating...", headersJSON)
+    // Parse cmsd-dynamic value
+    const cmsdDynamicValue = headersJSON["cmsd-dynamic"]
+    const modifiedCmsdDynamicValue = cmsdDynamicValue.replace(/\\"/g, '"')
+    const cmsdDynamicObject = {}
+    modifiedCmsdDynamicValue.split(";").forEach(pair => {
+      const [key, value] = pair.split("=")
+      cmsdDynamicObject[key] = value
+    })
+
+    console.log(cmsdDynamicObject)
+    // validate each key in the cmsdDynamicObject
+    Object.keys(cmsdDynamicObject).forEach(key => {
+      if (!validateKeyValue(key, cmsdDynamicObject[key])) {
+        console.log(
+            "Invalid key-value pair: " + key + "=" + cmsdDynamicObject[key]
+        )
+      }
+      // else {
+      //
+      //   console.log("Maybe Valid Dynamic key-value pair: " + key + " = " + cmsdDynamicObject[key])
+      // }
+    })
+
+    // Parse cmsd-static value
+    const cmsdStaticValue = headersJSON["cmsd-static"]
+    const modifiedCmsdStaticValue = cmsdStaticValue.replace(/\\"/g, '"')
+    const cmsdStaticObject = {}
+    modifiedCmsdStaticValue.split(",").forEach(pair => {
+      const [key, value] = pair.split("=")
+      cmsdStaticObject[key] = value
+    })
+
+    console.log(cmsdStaticObject)
+    // validate each key in the cmsdStaticObject
+    Object.keys(cmsdStaticObject).forEach(key => {
+      if (!validateKeyValue(key, cmsdStaticObject[key])) {
+        console.log(
+            "Invalid key-value pair: " + key + "=" + cmsdStaticObject[key]
+        )
+      }
+      // else {
+      //
+      //   console.log("Maybe Valid Static key-value pair: " + key + " = " + cmsdStaticObject[key])
+      // }
+    })
   } catch (e) {
     console.log("Invalid header")
     return false
   }
   //  console.log(headersJSON);
 
-  // Parse cmsd-dynamic value
-  const cmsdDynamicValue = headersJSON["cmsd-dynamic"]
-  const modifiedCmsdDynamicValue = cmsdDynamicValue.replace(/\\"/g, '"')
-  const cmsdDynamicObject = {}
-  modifiedCmsdDynamicValue.split(";").forEach(pair => {
-    const [key, value] = pair.split("=")
-    cmsdDynamicObject[key] = value
-  })
 
-  console.log(cmsdDynamicObject)
-  // validate each key in the cmsdDynamicObject
-  Object.keys(cmsdDynamicObject).forEach(key => {
-    if (!validateKeyValue(key, cmsdDynamicObject[key])) {
-      console.log(
-        "Invalid key-value pair: " + key + "=" + cmsdDynamicObject[key]
-      )
-    }
-  })
-
-  // Parse cmsd-static value
-  const cmsdStaticValue = headersJSON["cmsd-static"]
-  const modifiedCmsdStaticValue = cmsdStaticValue.replace(/\\"/g, '"')
-  const cmsdStaticObject = {}
-  modifiedCmsdStaticValue.split(",").forEach(pair => {
-    const [key, value] = pair.split("=")
-    cmsdStaticObject[key] = value
-  })
-
-  console.log(cmsdStaticObject)
-  // validate each key in the cmsdStaticObject
-  Object.keys(cmsdStaticObject).forEach(key => {
-    if (!validateKeyValue(key, cmsdStaticObject[key])) {
-      console.log(
-        "Invalid key-value pair: " + key + "=" + cmsdStaticObject[key]
-      )
-    }
-  })
 }
-
-export { CMSDValidator }
