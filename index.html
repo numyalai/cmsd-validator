@@ -27,9 +27,56 @@
         // Enable XHR debugging
         // console.log(dashPlayer);
         // console.log(dashPlayer.getSettings());
-        console.log(dashPlayer.getDashMetrics())
-        console.log((dashPlayer.getDashMetrics()).getCurrentHttpRequest("video"));
-        console.log((dashPlayer.getDashMetrics()).getClassName());
+
+        setInterval(() => {
+            var metrics = dashPlayer.getDashMetrics()
+            console.log(metrics.getHttpRequests("video"))
+
+            const x = metrics.getHttpRequests("video")
+
+            const headersString =x.pop()._responseHeaders
+
+            function parseHeaders(headersString) {
+                const headersArray = headersString.split('\r\n');
+                const headersObj = {};
+
+                headersArray.forEach(header => {
+                    const [key, ...valueParts] = header.split(': ');
+                    const value = valueParts.join(': '); // Reconstruct the original value (it may contain ':')
+                    headersObj[key] = value;
+                });
+
+                return headersObj;
+            }
+
+            const headersJSON = parseHeaders(headersString);
+          //  console.log(headersJSON);
+
+            // Parse cmsd-dynamic value
+            const cmsdDynamicValue = headersJSON["cmsd-dynamic"];
+            const modifiedCmsdDynamicValue = cmsdDynamicValue.replace(/\\"/g, '"');
+            const cmsdDynamicObject = {};
+            modifiedCmsdDynamicValue.split(';').forEach(pair => {
+                const [key, value] = pair.split('=');
+                cmsdDynamicObject[key] = value;
+            });
+
+            console.log(cmsdDynamicObject);
+
+            // Parse cmsd-static value
+            const cmsdStaticValue = headersJSON["cmsd-static"];
+            const modifiedCmsdStaticValue = cmsdStaticValue.replace(/\\"/g, '"');
+            const cmsdStaticObject = {};
+            modifiedCmsdStaticValue.split(',').forEach(pair => {
+                const [key, value] = pair.split('=');
+                cmsdStaticObject[key] = value;
+            });
+
+            console.log(cmsdStaticObject);
+
+         //   console.log("HTTP Request Headers"  + Object.keys(metrics.getHttpRequests("video")))
+            console.log("#############")
+        }, 3000)
 
         // console.log(dashPlayer.getDebug());
         //console.log(dashPlayer.getDashAdapter());
