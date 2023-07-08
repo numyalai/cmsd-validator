@@ -4,45 +4,39 @@ function validateStreamingFormat(format) {
     // No tokens found, format is invalid or unknown
     return false;
   }
-
-  const expectedTokens = ['d', 'h', 's'];
-  const extractedTokens = tokens[1].split(' ');
-
+  const expectedTokens = ["d", "h", "s"];
+  const extractedTokens = tokens[1].split(" ");
   // Check if all extracted tokens are valid
-  return extractedTokens.every(token => expectedTokens.includes(token) || token === 'o');
+  return extractedTokens.every(
+    (token) => expectedTokens.includes(token) || token === "o"
+  );
 }
 
-
 function validateNRR(nrrValue) {
-  const rangeRegex = /(\d+)-(\d+)/
-  const match = nrrValue.match(rangeRegex)
-
+  const rangeRegex = /(\d+)-(\d+)/;
+  const match = nrrValue.match(rangeRegex);
   if (!match) {
     // Invalid range format
-    return false
+    return false;
   }
-
-  const start = parseInt(match[1])
-  const end = parseInt(match[2])
-
+  const start = parseInt(match[1]);
+  const end = parseInt(match[2]);
   if (isNaN(start) || isNaN(end)) {
     // Invalid start or end value
-    return false
+    return false;
   }
-
   // Additional validation constraints can be applied here if needed
-
-  return true
+  return true;
 }
 
 function validateKeyValue(key, value) {
   // Main
   if (key == "at") {
     // Check if value is a number (value is a string)
-    return !isNaN(value)
+    return !isNaN(value);
   }
   if (key == "br") {
-    return !isNaN(value)
+    return !isNaN(value);
   }
 
   if (key == "ht") {
@@ -53,7 +47,7 @@ function validateKeyValue(key, value) {
       This is applicable to blocking responses under
       LL-HLS [HLSbis].
       */
-    return !isNaN(value)
+    return !isNaN(value);
   }
   if (key == "n") {
     /* 
@@ -65,7 +59,7 @@ function validateKeyValue(key, value) {
       to reduce log file and transferred size, while
       still remaining unique. 
       */
-    return typeof value == "string"
+    return typeof value == "string";
   }
   if (key == "nor") {
     /* 
@@ -85,7 +79,7 @@ function validateKeyValue(key, value) {
           must be taken to percent-encode the "|"
           character if it appears in the path.
       */
-    return typeof value == "string" && value.includes("|")
+    return typeof value == "string" && value.includes("|");
   }
   if (key == "nrr") {
     /*
@@ -106,7 +100,7 @@ function validateKeyValue(key, value) {
       ranges is NOT allowed and the only valid form
       is "<range-start>-<range-end>"
       */
-    return validateNRR(value)
+    return validateNRR(value);
   }
   if (key == "d") {
     /*
@@ -118,7 +112,7 @@ function validateKeyValue(key, value) {
       omitted. This key MUST NOT be used in
       responses to range requests against objects
       */
-    return !isNaN(value)
+    return !isNaN(value);
   }
   if (key == "ot") {
     /*
@@ -149,7 +143,7 @@ function validateKeyValue(key, value) {
       value == "tt" ||
       value == "k" ||
       value == "o"
-    )
+    );
   }
   if (key == "su") {
     /*
@@ -162,7 +156,7 @@ function validateKeyValue(key, value) {
       approximate the starting buffer of the
       intended players.
       */
-    return value == "true" || value == "false"
+    return value == "true" || value == "false";
   }
   if (key == "st") {
     /*
@@ -173,7 +167,7 @@ function validateKeyValue(key, value) {
           trusted for no longer than the cache time of
           the object. 
       */
-    return value == "v" || value == "l"
+    return value == "v" || value == "l";
   }
   if (key == "sf") {
     /*
@@ -204,7 +198,7 @@ function validateKeyValue(key, value) {
           version 1. A server SHOULD omit this field if
           the version is 1.
       */
-    return !isNaN(value)
+    return !isNaN(value);
   }
   // Identifier
   if (key == "du") {
@@ -219,7 +213,7 @@ function validateKeyValue(key, value) {
       alternate server if possible. This key MUST
       NOT be sent if it is false.
       */
-    return value == "true" || value == "false"
+    return value == "true" || value == "false";
   }
   if (key == "etp") {
     /* 
@@ -250,7 +244,7 @@ function validateKeyValue(key, value) {
           the entirety of the connection, not all of which
           will be accessible to the media player. 
       */
-    return !isNaN(value)
+    return !isNaN(value);
   }
   if (key == "mb") {
     /* 
@@ -261,7 +255,7 @@ function validateKeyValue(key, value) {
           than this value, it SHOULD immediately switch
           to a bitrate lower than or equal to this value
       */
-    return !isNaN(value)
+    return !isNaN(value);
   }
   if (key == "rd") {
     /*
@@ -273,7 +267,7 @@ function validateKeyValue(key, value) {
       more accurately calculate the throughput of
       the connection [MHV22]. 
       */
-    return !isNaN(value)
+    return !isNaN(value);
   }
   if (key == "rtt") {
     /*
@@ -287,84 +281,98 @@ function validateKeyValue(key, value) {
           An informative example algorithm for this
           averaging is provided by [18].
       */
-    return !isNaN(value)
+    return !isNaN(value);
   }
-
 
   return true;
 }
 
 function parseHeaders(headersString) {
-  const headersArray = headersString.split("\r\n")
-  const headersObj = {}
+  const headersArray = headersString.split("\r\n");
+  const headersObj = {};
 
-  headersArray.forEach(header => {
-    const [key, ...valueParts] = header.split(": ")
-    const value = valueParts.join(": ") // Reconstruct the original value (it may contain ':')
-    headersObj[key] = value
-  })
+  headersArray.forEach((header) => {
+    const [key, ...valueParts] = header.split(": ");
+    const value = valueParts.join(": "); // Reconstruct the original value (it may contain ':')
+    headersObj[key] = value;
+  });
 
-  return headersObj
+  return headersObj;
 }
 
-const CMSDValidator = header => {
+const CMSDValidator = (header) => {
   if (!header) {
-    console.log("No header provided")
-    return false
+    console.log("No header provided");
+    return false;
   }
   try {
-    const headersJSON = parseHeaders(header)
-    console.log("Headers parsed successfully, validating...", headersJSON)
+    const headersJSON = parseHeaders(header);
+    console.log("Headers parsed successfully, validating...", headersJSON);
     // Parse cmsd-dynamic value
-    const cmsdDynamicValue = headersJSON["cmsd-dynamic"]
-    const modifiedCmsdDynamicValue = cmsdDynamicValue.replace(/\\"/g, '"')
-    const cmsdDynamicObject = {}
-    modifiedCmsdDynamicValue.split(";").forEach(pair => {
-      const [key, value] = pair.split("=")
-      cmsdDynamicObject[key] = value
-    })
+    const cmsdDynamicValue = headersJSON["cmsd-dynamic"];
+    const modifiedCmsdDynamicValue = cmsdDynamicValue.replace(/\\"/g, '"');
+    const cmsdDynamicObject = {};
+    modifiedCmsdDynamicValue.split(";").forEach((pair) => {
+      const [key, value] = pair.split("=");
+      cmsdDynamicObject[key] = value;
+    });
 
-    console.log(cmsdDynamicObject)
+    console.log(cmsdDynamicObject);
     // validate each key in the cmsdDynamicObject
-    Object.keys(cmsdDynamicObject).forEach(key => {
+    Object.keys(cmsdDynamicObject).forEach((key) => {
       if (!validateKeyValue(key, cmsdDynamicObject[key])) {
+        results.push({
+          status: "error",
+          key: key,
+          value: cmsdDynamicObject[key],
+          type: "dynamic",
+        });
         console.log(
-            "Invalid key-value pair: " + key + "=" + cmsdDynamicObject[key]
-        )
+          "Invalid key-value pair: " + key + "=" + cmsdDynamicObject[key]
+        );
+      } else {
+        results.push({
+          valid: false,
+          key: key,
+          value: cmsdDynamicObject[key],
+          type: "dynamic",
+        });
       }
-      // else {
-      //
-      //   console.log("Maybe Valid Dynamic key-value pair: " + key + " = " + cmsdDynamicObject[key])
-      // }
-    })
-
+    });
     // Parse cmsd-static value
-    const cmsdStaticValue = headersJSON["cmsd-static"]
-    const modifiedCmsdStaticValue = cmsdStaticValue.replace(/\\"/g, '"')
-    const cmsdStaticObject = {}
-    modifiedCmsdStaticValue.split(",").forEach(pair => {
-      const [key, value] = pair.split("=")
-      cmsdStaticObject[key] = value
-    })
+    const cmsdStaticValue = headersJSON["cmsd-static"];
+    const modifiedCmsdStaticValue = cmsdStaticValue.replace(/\\"/g, '"');
+    const cmsdStaticObject = {};
+    modifiedCmsdStaticValue.split(",").forEach((pair) => {
+      const [key, value] = pair.split("=");
+      cmsdStaticObject[key] = value;
+    });
 
-    console.log(cmsdStaticObject)
+    console.log(cmsdStaticObject);
     // validate each key in the cmsdStaticObject
-    Object.keys(cmsdStaticObject).forEach(key => {
+    Object.keys(cmsdStaticObject).forEach((key) => {
       if (!validateKeyValue(key, cmsdStaticObject[key])) {
+        results.push({
+          status: "error",
+          key: key,
+          value: cmsdStaticObject[key],
+          type: "static",
+        });
         console.log(
-            "Invalid key-value pair: " + key + "=" + cmsdStaticObject[key]
-        )
+          "Invalid key-value pair: " + key + "=" + cmsdStaticObject[key]
+        );
+      } else {
+        results.push({
+          valid: false,
+          key: key,
+          value: cmsdStaticObject[key],
+          type: "static",
+        });
       }
-      // else {
-      //
-      //   console.log("Maybe Valid Static key-value pair: " + key + " = " + cmsdStaticObject[key])
-      // }
-    })
+    });
+    return results;
   } catch (e) {
-    console.log("Invalid header")
-    return false
+    console.log("Invalid header");
+    return false;
   }
-  //  console.log(headersJSON);
-
-
-}
+};
