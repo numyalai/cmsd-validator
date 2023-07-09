@@ -32,7 +32,7 @@ function sendCMSDHeaders(r){
     staticResponse += 'su='  + getRandomBool() + ','
     staticResponse += 'st='  + getRandomStreamingType() + ','
     staticResponse += 'sf='  + getRandomStreamingFormat() + ','
-    staticResponse += 'v='   + getRandomInt()
+    staticResponse += 'v='   + 'abc' //getRandomInt()
 
     dynamicResponse = '"CDN_:' + getRandomString() + '";'
     dynamicResponse += 'du='     + getRandomBool() + ';'
