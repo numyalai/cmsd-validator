@@ -306,6 +306,7 @@ const CMSDValidator = (header) => {
     return false;
   }
   try {
+    let results = [];
     const headersJSON = parseHeaders(header);
     console.log("Headers parsed successfully, validating...", headersJSON);
     // Parse cmsd-dynamic value
@@ -322,7 +323,7 @@ const CMSDValidator = (header) => {
     Object.keys(cmsdDynamicObject).forEach((key) => {
       if (!validateKeyValue(key, cmsdDynamicObject[key])) {
         results.push({
-          status: "error",
+          valid: false,
           key: key,
           value: cmsdDynamicObject[key],
           type: "dynamic",
@@ -332,7 +333,7 @@ const CMSDValidator = (header) => {
         );
       } else {
         results.push({
-          valid: false,
+          valid: true,
           key: key,
           value: cmsdDynamicObject[key],
           type: "dynamic",
@@ -353,7 +354,7 @@ const CMSDValidator = (header) => {
     Object.keys(cmsdStaticObject).forEach((key) => {
       if (!validateKeyValue(key, cmsdStaticObject[key])) {
         results.push({
-          status: "error",
+          valid: false,
           key: key,
           value: cmsdStaticObject[key],
           type: "static",
@@ -363,7 +364,7 @@ const CMSDValidator = (header) => {
         );
       } else {
         results.push({
-          valid: false,
+          valid: true,
           key: key,
           value: cmsdStaticObject[key],
           type: "static",

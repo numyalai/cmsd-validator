@@ -1,45 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="index.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CMSD Validator</title>
-    <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script>
-    <script src="CMSDValidator.js"></script>
-    <script src="index.js"></script>
-  </head>
-  <body>
-    <div class="container mt-5">
-      <div class="row mb-3">
-        <div class="col-12">
-          <input type="text" id="video_url" placeholder="Enter CMSD URL" style="width: 80%"/>
-          <button id="submit" class="btn btn-primary">Submit</button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-12">
-          <h1>Video Player</h1>
-          <video id="videoElement" controls loop muted></video>
-        </div>
-        <div class="col-md-6 col-12">
-          <h1>CMSD Validation results</h1>
-          <div id="result"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-12">
-          <h5> Errors Count: <span id="errors_count"></span></h5>
-          <h5> Valid Count: <span id="valid_count"></span></h5>
-        </div>
+
+<head>
+  <style>
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    body {
+      background: rebeccapurple !important;
+      color: white !important;
+    }
+
+    video {
+      max-width: 100%;
+      height: 360px;
+    }
+
+    #result {
+      height: 360px;
+      overflow-y: scroll;
+    }
+  </style>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+  <link rel="stylesheet" href="index.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMSD Validator</title>
+  <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script>
+  <script src="CMSDValidator.js"></script>
+  <script src="index.js"></script>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="row mb-3">
+      <div class="col-12">
+        <input type="text" id="video_url" placeholder="Enter Video URL" style="width: 80%" />
+        <button id="submit" class="btn btn-primary">Submit</button>
       </div>
     </div>
-  </body>
+    <div class="row">
+      <div class="col-md-6 col-12">
+        <h1>Video Player</h1>
+        <video id="videoElement" controls loop muted></video>
+      </div>
+      <div class="col-md-6 col-12">
+        <h1>CMSD Validation results</h1>
+        <div id="result"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-12">
+        <h5> Errors Count: <span id="errors_count"></span></h5>
+        <h5> Valid Count: <span id="valid_count"></span></h5>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>
