@@ -65,16 +65,16 @@ setInterval(() => {
   }
 }, 4000);
 // after document is loaded
-
-  document.getElementById("submit").addEventListener("click", function (event) {
-    // prevent form from submitting
-    event.preventDefault();
-    let url = document.getElementById("video_url").value;
-    dashPlayer.attachSource(url);
-    document.getElementById("result").innerHTML = "";
-    errors_count = 0;
-    valid_count = 0;
-    document.getElementById("errors_count").innerHTML = errors_count;
-    document.getElementById("valid_count").innerHTML = valid_count;
-  });
+  // TODO: Allow user to enter a url for the video
+  // document.getElementById("submit").addEventListener("click", function (event) {
+  //   // prevent form from submitting
+  //   event.preventDefault();
+  //   let url = document.getElementById("video_url").value;
+  //   dashPlayer.attachSource(url);
+  //   document.getElementById("result").innerHTML = "";
+  //   errors_count = 0;
+  //   valid_count = 0;
+  //   document.getElementById("errors_count").innerHTML = errors_count;
+  //   document.getElementById("valid_count").innerHTML = valid_count;
+  // });
 });
