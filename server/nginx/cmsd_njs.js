@@ -15,9 +15,9 @@ function sendCMSDHeaders(r){
     if(requestedHeaders.includes('ht'))
         staticResponse += 'ht='  + getRandomInt() + ','
     if(requestedHeaders.includes('n,'))
-        staticResponse += 'n='   + 'Intermediary_' + getRandomString() + ','
+        staticResponse += 'n='   + '"Intermediary_' + getRandomString() + '",'
     if(requestedHeaders.includes('nor'))
-        staticResponse += 'nor=' + getRandomString() + '|'  + getRandomString() + '|' + getRandomString() + ','
+        staticResponse += 'nor="' + getRandomString() + '|'  + getRandomString() + '|' + getRandomString() + '",'
     if(requestedHeaders.includes('nrr'))
         staticResponse += 'nrr=' + getRandomInt() + '-' + getRandomInt() + '|' + getRandomInt() + '-' + getRandomInt() + '|' + getRandomInt() + '-' + getRandomInt() + ','
     if(requestedHeaders.includes('#d,'))
