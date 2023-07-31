@@ -21,6 +21,13 @@
       height: 360px;
       overflow-y: scroll;
     }
+    .grid-container {
+      margin-left: 120px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 0px;
+
+    }
   </style>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -35,6 +42,97 @@
 </head>
 
 <body>
+  <h1>CMSD Validator</h1>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6 col-12">
+        <h1>CMSD-Static</h1>
+        <div class="row">
+          <div class="col-md-4 col-12">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check" name="at" checked>
+              <label class="form-check-label" for="check">at</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check2" name="br" checked>
+              <label class="form-check-label" for="check2">br</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check3" name="ht" checked>
+              <label class="form-check-label" for="check3">ht</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check4" name="n" checked>
+              <label class="form-check-label" for="check4">n</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check5" name="nor" checked>
+              <label class="form-check-label" for="check5">nor</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check6" name="nrr" checked>
+              <label class="form-check-label" for="check6">nrr</label>
+            </div>
+          </div>
+          <div class="col-md-4 col-12">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check7" name="d" checked>
+              <label class="form-check-label" for="check7">d</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check8" name="ot" checked>
+              <label class="form-check-label" for="check8">ot</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check9" name="su" checked>
+              <label class="form-check-label" for="check9">su</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check10" name="st" checked>
+              <label class="form-check-label" for="check10">st</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check11" name="sf" checked>
+              <label class="form-check-label" for="check11">sf</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="check12" name="v" checked>
+              <label class="form-check-label" for="check12">v</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-12">
+        <h1>CMSD-Dynamic</h1>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="check13" name="du" checked>
+          <label class="form-check-label" for="check13">du</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="check4" name="etp" checked>
+          <label class="form-check-label" for="check14">etp</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="check15" name="mb" checked>
+          <label class="form-check-label" for="check15">mb</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="check16" name="rd" checked>
+          <label class="form-check-label" for="check16">rd</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="check17" name="rtt" checked>
+          <label class="form-check-label" for="check17">rtt</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button type="submitHeaders" class="btn btn-primary mt-3" onclick="writeRequestedHeaders()">Send selected CMSD-Static and CMSD-Dynamic headers</button>
+    </div>
+  </div>
+  <div class="container mt-5">
+    
+  </div>
   <div class="container mt-5">
     <!-- TODO: Allow user to enter a url for the video -->
     <!-- <div class="row mb-3">

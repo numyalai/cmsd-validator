@@ -1,9 +1,27 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 const videoElement = document.getElementById("videoElement");
 const dashPlayer = dashjs.MediaPlayer().create();
 let errors_count = 0;
 let valid_count = 0;
 let validatedHeader = {}
+
+//reset so all Headers are send by the test server
+let headersToSend = "#at,#br,#ht,#n,#nor,#nrr,#d,#ot,#su,#st,#sf,#v,#du,#etp,#mb,#rd,#rtt,";
+var xhr = new XMLHttpRequest();
+xhr.open('post', 'http://localhost:8080/writeRequestedCmsdHeaders', true);
+xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+xhr.send(headersToSend);
+
+//for testing with NUStreaming implementation http://localhost:8081/cmsd-njs/bufferBasedResponseDelay/media/vod/bbb_30fps_akamai/bbb_30fps.mpd?CMCD=bl%3D21300%2Ccom.example-bmx%3D20000%2Ccom.example-bmn%3D5000%2Cot%3Dv%2Cbr%3D1000%2Cd%3D4000%2Cmtp%3D1000
+// dashPlayer.updateSettings({
+//   streaming: {
+//     cmcd: {
+//         enabled: true
+//     }
+//   }				
+// });
+
 
 dashPlayer.initialize(
   videoElement,
@@ -78,3 +96,19 @@ setInterval(() => {
   //   document.getElementById("valid_count").innerHTML = valid_count;
   // });
 });
+
+function writeRequestedHeaders(){
+  let form = document.getElementsByClassName("form-check-input");
+  let headersToSend = "";
+
+  for (let i = 0; i < form.length; i++){
+    if(form[i].checked)
+      headersToSend += '#' + form[i].name + ',';
+  }
+
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('post', 'http://localhost:8080/writeRequestedCmsdHeaders', true);
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.send(headersToSend);
+}

@@ -1,45 +1,49 @@
-var querystring = require('querystring');
 var fs = require('fs');
 
-var LOGFILE = '/home/sultan/school_projects/cmsd-validator/cmsd.log';
-
-function writeLog(msg) {
-    //var dateTime = new Date().toLocaleString();
-    var logLine = ('\n' + msg);
-    try {
-        fs.appendFileSync(LOGFILE, logLine);
-    } catch (e) {
-        return e;
-        // unable to write to file
-    }
-}
-
 function sendCMSDHeaders(r){
+    let staticResponse = '';
+    let dynamicResponse = '';
 
-    let staticResponse
-    let dynamicResponse
+    let requestedHeaders = readRequestedHeaders();
 
     let dashObjUri = r.variables.args.split('/cmsdValidator')[1].split(' ')[0];
 
-    staticResponse = 'at='   + getRandomInt() + ','
-    staticResponse += 'br='  + getRandomInt() + ','
-    staticResponse += 'ht='  + getRandomInt() + ','
-    staticResponse += 'n='   + 'Intermediary_' + getRandomString() + ','
-    staticResponse += 'nor=' + getRandomString() + '|'  + getRandomString() + '|' + getRandomString() + ','
-    staticResponse += 'nrr=' + getRandomInt() + '-' + getRandomInt() + '|' + getRandomInt() + '-' + getRandomInt() + '|' + getRandomInt() + '-' + getRandomInt() + ','
-    staticResponse += 'd='   + getRandomInt() + ','
-    staticResponse += 'ot='  + getRandomObjectType() + ','
-    staticResponse += 'su='  + getRandomBool() + ','
-    staticResponse += 'st='  + getRandomStreamingType() + ','
-    staticResponse += 'sf='  + getRandomStreamingFormat() + ','
-    staticResponse += 'v='   + 'abc' //getRandomInt()
+    if(requestedHeaders.includes('at'))
+        staticResponse = 'at='   + getRandomInt() + ','
+    if(requestedHeaders.includes('br'))
+        staticResponse += 'br='  + getRandomInt() + ','
+    if(requestedHeaders.includes('ht'))
+        staticResponse += 'ht='  + getRandomInt() + ','
+    if(requestedHeaders.includes('n,'))
+        staticResponse += 'n='   + '"Intermediary_' + getRandomString() + '",'
+    if(requestedHeaders.includes('nor'))
+        staticResponse += 'nor="' + getRandomString() + '|'  + getRandomString() + '|' + getRandomString() + '",'
+    if(requestedHeaders.includes('nrr'))
+        staticResponse += 'nrr=' + getRandomInt() + '-' + getRandomInt() + '|' + getRandomInt() + '-' + getRandomInt() + '|' + getRandomInt() + '-' + getRandomInt() + ','
+    if(requestedHeaders.includes('#d,'))
+        staticResponse += 'd='   + getRandomInt() + ','
+    if(requestedHeaders.includes('ot'))
+        staticResponse += 'ot='  + getRandomObjectType() + ','
+    if(requestedHeaders.includes('su'))
+        staticResponse += 'su='  + getRandomBool() + ','
+    if(requestedHeaders.includes('st'))
+        staticResponse += 'st='  + getRandomStreamingType() + ','
+    if(requestedHeaders.includes('sf'))
+        staticResponse += 'sf='  + getRandomStreamingFormat() + ','
+    if(requestedHeaders.includes('v'))
+        staticResponse += 'v='   + getRandomInt()
 
-    dynamicResponse = '"CDN_:' + getRandomString() + '";'
-    dynamicResponse += 'du='     + getRandomBool() + ';'
-    dynamicResponse += 'etp='    + getRandomInt() + ';'
-    dynamicResponse += 'mb='     + getRandomInt() + ';'
-    dynamicResponse += 'rd='     + getRandomInt() + ';'
-    dynamicResponse += 'rtt='    + getRandomInt()
+    dynamicResponse = '"CDN_:'   + getRandomString() + '";'
+    if(requestedHeaders.includes('du'))
+        dynamicResponse += 'du='     + getRandomBool() + ';'
+    if(requestedHeaders.includes('etp'))
+        dynamicResponse += 'etp='    + getRandomInt() + ';'
+    if(requestedHeaders.includes('mb'))
+        dynamicResponse += 'mb='     + getRandomInt() + ';'
+    if(requestedHeaders.includes('rd'))
+        dynamicResponse += 'rd='     + getRandomInt() + ';'
+    if(requestedHeaders.includes('rtt'))
+        dynamicResponse += 'rtt='    + getRandomInt()
 
 
     function done(res) {
@@ -49,6 +53,22 @@ function sendCMSDHeaders(r){
     }
     r.subrequest(dashObjUri, r.variables.args, done);
     r.finish();
+}
+
+
+function readRequestedHeaders(){
+    return fs.readFileSync('/home/dominik/Uni/AWT/cmsd-validator/setCmsdHeaders.txt')
+}
+
+function writeRequestedHeaders(r){
+    try {
+        fs.writeFileSync('/home/dominik/Uni/AWT/cmsd-validator/setCmsdHeaders.txt', JSON.stringify(r.requestText));
+    } 
+    catch (e) {
+        console.log(e);
+    }
+
+    r.return(200, '');
 }
 
 function getRandomInt(){
@@ -99,6 +119,5 @@ function getRandomString(){
     return string;
 }
 
-// Note: We need to add the function to nginx.conf file too for HTTP access
-export default { sendCMSDHeaders };
+export default { sendCMSDHeaders, writeRequestedHeaders };
 
