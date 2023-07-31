@@ -58,7 +58,6 @@ function sendCMSDHeaders(r){
 
 function readRequestedHeaders(){
     return fs.readFileSync('/home/dominik/Uni/AWT/cmsd-validator/setCmsdHeaders.txt')
-
 }
 
 function writeRequestedHeaders(r){
