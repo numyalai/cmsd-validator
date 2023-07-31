@@ -18,6 +18,15 @@ let validatedHeader = {}
 //})();
 //})();
 
+//for testing with NUStreaming implementation http://localhost:8081/cmsd-njs/bufferBasedResponseDelay/media/vod/bbb_30fps_akamai/bbb_30fps.mpd?CMCD=bl%3D21300%2Ccom.example-bmx%3D20000%2Ccom.example-bmn%3D5000%2Cot%3Dv%2Cbr%3D1000%2Cd%3D4000%2Cmtp%3D1000
+// dashPlayer.updateSettings({
+//   streaming: {
+//     cmcd: {
+//         enabled: true
+//     }
+//   }				
+// });
+
 
 dashPlayer.initialize(
   videoElement,
@@ -80,17 +89,17 @@ setInterval(() => {
 }, 4000);
 // after document is loaded
 
-  // document.getElementById("submit").addEventListener("click", function (event) {
-  //   // prevent form from submitting
-  //   event.preventDefault();
-  //   let url = document.getElementById("video_url").value;
-  //   dashPlayer.attachSource(url);
-  //   document.getElementById("result").innerHTML = "";
-  //   errors_count = 0;
-  //   valid_count = 0;
-  //   document.getElementById("errors_count").innerHTML = errors_count;
-  //   document.getElementById("valid_count").innerHTML = valid_count;
-  // });
+  document.getElementById("submit").addEventListener("click", function (event) {
+    // prevent form from submitting
+    event.preventDefault();
+    let url = document.getElementById("video_url").value;
+    dashPlayer.attachSource(url);
+    document.getElementById("result").innerHTML = "";
+    errors_count = 0;
+    valid_count = 0;
+    document.getElementById("errors_count").innerHTML = errors_count;
+    document.getElementById("valid_count").innerHTML = valid_count;
+  });
 });
 
 function writeRequestedHeaders(){
